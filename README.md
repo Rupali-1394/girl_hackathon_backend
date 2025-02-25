@@ -1,4 +1,4 @@
-### **Google_Gir_Hackathon_Backend** 🚀  
+### **Google_Girl_Hackathon_Backend** 🚀  
 This is the backend service for the **Google Hackathon Project**, providing APIs for authentication, data handling, and integration with the frontend.  
 
 ## **🛠 Tech Stack**  
