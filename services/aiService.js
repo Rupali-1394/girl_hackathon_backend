@@ -19,8 +19,18 @@ class AIService {
 
     async generateChatResponse(message) {
         try {
-            console.log('Generating response for:', message);
-            const prompt = `You are a tax advisor. Please provide advice about: ${message}. 
+            // Make sure message is a string
+            const messageText = typeof message === 'string' ? message : 
+                              Array.isArray(message) ? message[0]?.text : 
+                              message?.text || '';
+
+            if (!messageText) {
+                throw new Error('Invalid message format');
+            }
+
+            console.log('Processing message:', messageText);
+
+            const prompt = `You are a tax advisor. Please provide advice about: ${messageText}. 
                           Keep the response clear and concise.`;
             
             const result = await this.model.generateContent(prompt);

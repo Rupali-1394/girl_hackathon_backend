@@ -7,17 +7,13 @@ router.post('/chat', async (req, res) => {
         const { message } = req.body;
         console.log('Received message:', message);
         
-        if (!message || typeof message !== 'string') {
+        if (!message) {
             return res.status(400).json({ 
                 error: 'Please provide a valid question.' 
             });
         }
 
-        const response = await aiService.generateChatResponse([{
-            text: message,
-            sender: 'user'
-        }]);
-
+        const response = await aiService.generateChatResponse(message);
         console.log('AI Response:', response);
 
         res.json({ 
