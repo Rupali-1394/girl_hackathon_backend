@@ -27,15 +27,13 @@ class AIService {
     async analyzeTaxDocument(documentText) {
         try {
             const prompt = `
-                As a tax document analyzer, please analyze this document and provide:
-                1. A summary of key financial information
-                2. Important tax implications
-                3. Potential deductions or credits
-                4. Any red flags or areas of concern
-                
+                Analyze this tax document and provide:
+                1. Key financial information summary
+                2. Tax implications
+                3. Potential deductions
+                4. Areas of concern
+
                 Document: ${documentText}
-                
-                Format the response with clear sections and bullet points.
             `;
             const result = await this.model.generateContent(prompt);
             const response = await result.response;
