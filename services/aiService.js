@@ -3,7 +3,7 @@ const { GoogleGenerativeAI } = require("@google/generative-ai");
 class AIService {
     constructor() {
         try {
-            this.genAI = new GoogleGenerativeAI("AIzaSyAyNQfx05EkHrQMSyOYMrOREbY2al1hZy8");
+            this.genAI = new GoogleGenerativeAI(process.env.AI_STUDIO_API_KEY);
             this.model = this.genAI.getGenerativeModel({ model: "gemini-pro" });
             console.log('AI Service initialized successfully');
         } catch (error) {
@@ -52,14 +52,30 @@ class AIService {
 
     async generateChatResponse(messages) {
         try {
+            if (!messages || !messages[0]?.text) {
+                throw new Error('Invalid input message');
+            }
+
             console.log('Generating response for:', messages[0].text);
             
             const result = await this.model.generateContent({
-                contents: [{ parts: [{ text: messages[0].text }] }]
+                contents: [{ parts: [{ text: messages[0].text }] }],
+                generationConfig: {
+                    temperature: 0.7,
+                    maxOutputTokens: 800,
+                }
             });
 
-            const response = await result.response;
+            if (!result || !result.response) {
+                throw new Error('Failed to generate AI response');
+            }
+
+            const response = result.response;
             const text = response.text();
+            
+            if (!text) {
+                throw new Error('Empty response from AI');
+            }
             
             console.log('Generated response:', text);
             return text;
