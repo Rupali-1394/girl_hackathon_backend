@@ -56,8 +56,9 @@ class AIService {
                 throw new Error('Invalid input message');
             }
 
-            console.log('Generating response for:', messages[0].text);
-            
+            console.log('API Key:', process.env.AI_STUDIO_API_KEY ? 'Present' : 'Missing');
+            console.log('Input Message:', messages[0].text);
+
             const result = await this.model.generateContent({
                 contents: [{ parts: [{ text: messages[0].text }] }],
                 generationConfig: {
@@ -66,23 +67,16 @@ class AIService {
                 }
             });
 
-            if (!result || !result.response) {
-                throw new Error('Failed to generate AI response');
-            }
-
-            const response = result.response;
-            const text = response.text();
-            
-            if (!text) {
-                throw new Error('Empty response from AI');
-            }
-            
-            console.log('Generated response:', text);
-            return text;
+            console.log('AI Response:', result?.response?.text());
+            return result.response.text();
 
         } catch (error) {
-            console.error('AI Service Error:', error);
-            throw new Error(error.message || 'Failed to generate response');
+            console.error('Detailed AI Error:', {
+                message: error.message,
+                stack: error.stack,
+                response: error.response?.data
+            });
+            throw new Error(`AI Service Error: ${error.message}`);
         }
     }
 

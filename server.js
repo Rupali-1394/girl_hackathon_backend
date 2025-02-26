@@ -26,12 +26,12 @@ app.get('/health', (req, res) => {
 app.use('/api/tax', taxRoutes);
 app.use('/api/ai', aiRoutes);
 
-// Error handling middleware
+// Add error handling middleware
 app.use((err, req, res, next) => {
-    console.error('Error:', err);
+    console.error('Server Error:', err);
     res.status(500).json({ 
-        error: 'Something went wrong!',
-        details: err.message 
+        error: err.message || 'Something went wrong!',
+        details: process.env.NODE_ENV === 'development' ? err.stack : undefined
     });
 });
 
